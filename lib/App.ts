@@ -1,15 +1,31 @@
-import { createServer, IncomingMessage, OutgoingMessage, Server, ServerResponse } from "http";
+import { createServer, IncomingMessage, Server, ServerResponse } from "http";
 import { HttpContext } from "../interfaces/HttpContext";
 import { Method } from "../types/Route";
 import { Router } from "./Router";
 import { Middleware } from "../types/Middleware";
 import { loadStack } from "./middlewares/loadStack";
 import { parseJsonMiddleware } from "./middlewares/parseJsonMiddleware";
+import { getControllers } from "./di/controllerContainer";
+import { importControllers, useController } from "./loader/controllerLoader";
+import { ConfigLoader } from "./loader/ConfigLoader";
 
 export class App {
     declare server: Server<typeof IncomingMessage, typeof ServerResponse>;
     private middlewares: Middleware[] = [];
     private router = new Router();
+
+    loadControllers() {
+        importControllers().then(() => {
+            const controllers = getControllers();
+            for (const controller of controllers) {
+                useController(controller, this);
+            }
+        });
+    }
+
+    public addConfigLoader<T extends Object>(typeClass: new () => T) {
+        return new ConfigLoader(typeClass);
+    }
 
     add(method: Method, path: string, handler: (ctx: HttpContext) => void) {
         this.router.add(method, path, handler);

@@ -5,12 +5,12 @@ export async function loadStack(ctx: HttpContext, middlewares: Middleware[], han
     const stack = [...middlewares, handler];
     let index = -1;
 
-    const next = async (): Promise<void> => {
+    async function next(): Promise<void> {
         index++;
         if (index < stack.length) {
             await stack[index](ctx, next);
         }
-    };
+    }
 
     try {
         await next();

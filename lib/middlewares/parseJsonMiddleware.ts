@@ -1,5 +1,4 @@
 import { HttpContext } from "../../interfaces/HttpContext";
-import { Middleware } from "../../types/Middleware";
 import { Method } from "../../types/Route";
 import { bodyParser } from "../parser/bodyParser";
 
