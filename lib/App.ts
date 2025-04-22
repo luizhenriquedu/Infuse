@@ -8,6 +8,8 @@ import { parseJsonMiddleware } from "./middlewares/parseJsonMiddleware";
 import { getControllers } from "./di/controllerContainer";
 import { importControllers, useController } from "./loader/controllerLoader";
 import { ConfigLoader } from "./loader/ConfigLoader";
+import { parseUrlEncodedMiddleware } from "./middlewares/parseUrlEncodedMiddleware";
+
 export class App {
     declare server: Server<typeof IncomingMessage, typeof ServerResponse>;
     private defaultErrorMiddleware: ((ctx: HttpContext, error: Error) => Promise<void>) | undefined = undefined;
@@ -41,7 +43,7 @@ export class App {
     }
 
     parseUrlEncoded() {
-        this.use(parseJsonMiddleware);
+        this.use(parseUrlEncodedMiddleware);
     }
 
     parseJson() {

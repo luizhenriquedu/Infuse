@@ -1,8 +1,9 @@
 import { HttpContext } from "../../interfaces/HttpContext";
 import { Method } from "../../types/Route";
+
 import { parseUrlEncoded } from "../parser/parseUrlEncoded";
 
-export async function parseJsonMiddleware(ctx: HttpContext, next: () => Promise<void>) {
+export async function parseUrlEncodedMiddleware(ctx: HttpContext, next: () => Promise<void>) {
     if (["POST", "PUT", "PATCH"].includes(ctx.Request.method as Method)) {
         try {
             ctx.body = await parseUrlEncoded(ctx.Request);
