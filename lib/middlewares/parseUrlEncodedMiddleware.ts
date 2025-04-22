@@ -1,11 +1,11 @@
 import { HttpContext } from "../../interfaces/HttpContext";
 import { Method } from "../../types/Route";
-import { parseJsonBody } from "../parser/parseJsonBody";
+import { parseUrlEncoded } from "../parser/parseUrlEncoded";
 
 export async function parseJsonMiddleware(ctx: HttpContext, next: () => Promise<void>) {
     if (["POST", "PUT", "PATCH"].includes(ctx.Request.method as Method)) {
         try {
-            ctx.body = await parseJsonBody(ctx.Request);
+            ctx.body = await parseUrlEncoded(ctx.Request);
         } catch (e) {
             console.error(e);
             ctx.Response.end("Invalid body");

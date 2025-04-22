@@ -35,6 +35,7 @@ app.setDefaultErrorHandler(async (ctx, e) => {
         })
     );
 });
+
 app.loadControllers();
 
 app.listen(config.port, (err) => {
