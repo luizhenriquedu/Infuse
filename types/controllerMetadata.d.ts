@@ -7,5 +7,5 @@ export type controllerMetadata = {
         path: string;
         handlerName: string;
     }[];
-    middlewares: Function[];
+    middlewares: any;
 };

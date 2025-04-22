@@ -1,7 +1,12 @@
 import { HttpContext } from "../../interfaces/HttpContext";
 import { Middleware } from "../../types/Middleware";
 
-export async function loadStack(ctx: HttpContext, middlewares: Middleware[], handler: () => Promise<void>) {
+export async function loadStack(
+    ctx: HttpContext,
+    middlewares: Middleware[],
+    handler: () => Promise<void>,
+    errHandler?: (ctx: HttpContext, err: Error) => Promise<void>
+) {
     const stack = [...middlewares, handler];
     let index = -1;
 
@@ -15,6 +20,7 @@ export async function loadStack(ctx: HttpContext, middlewares: Middleware[], han
     try {
         await next();
     } catch (e) {
+        if (errHandler) return await errHandler(ctx, e as Error);
         ctx.Response.statusCode = 500;
         ctx.Response.end("Internal server error");
         console.error(e);

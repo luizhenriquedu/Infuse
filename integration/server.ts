@@ -1,6 +1,6 @@
 import { App } from "../lib/App";
 import { Controller } from "../lib/decorators/controllerDecorator";
-import { HttpGet } from "../lib/decorators/createMethodDecorator";
+import { HttpGet, HttpPost } from "../lib/decorators/createMethodDecorator";
 import { HttpContext } from "../interfaces/HttpContext";
 import { BaseController } from "../lib/classes/BaseController";
 
@@ -16,12 +16,25 @@ const config = app
 
 @Controller("get/")
 class TestController extends BaseController {
-    @HttpGet("t")
+    @HttpPost("t")
     getLog(ctx: HttpContext) {
-        console.log("hello");
+        const { email } = ctx.body;
+        if (!email) throw new Error("error");
+        ctx.Response.end("oi");
     }
 }
 
+app.setDefaultErrorHandler(async (ctx, e) => {
+    console.log(e);
+    ctx.Response.setHeader("Content-Type", "application/json");
+    ctx.Response.end(
+        JSON.stringify({
+            name: e.name,
+            message: e.message,
+            stack: e.stack,
+        })
+    );
+});
 app.loadControllers();
 
 app.listen(config.port, (err) => {

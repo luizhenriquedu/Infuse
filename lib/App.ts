@@ -11,6 +11,7 @@ import { ConfigLoader } from "./loader/ConfigLoader";
 
 export class App {
     declare server: Server<typeof IncomingMessage, typeof ServerResponse>;
+    private defaultErrorMiddleware: ((ctx: HttpContext, error: Error) => Promise<void>) | undefined = undefined;
     private middlewares: Middleware[] = [];
     private router = new Router();
 
@@ -44,6 +45,10 @@ export class App {
         this.use(parseJsonMiddleware);
     }
 
+    setDefaultErrorHandler(func: (ctx: HttpContext, error: Error) => Promise<void>) {
+        this.defaultErrorMiddleware = func;
+    }
+
     private async handler(req: IncomingMessage, res: ServerResponse) {
         const method = req.method as Method;
         const url = req.url || "/";
@@ -61,6 +66,6 @@ export class App {
                   res.statusCode = 404;
                   res.end("Not found");
               };
-        await loadStack(ctx, this.middlewares, handler);
+        await loadStack(ctx, this.middlewares, handler, this.defaultErrorMiddleware);
     }
 }

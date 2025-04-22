@@ -19,7 +19,7 @@ export function useController<T extends Constructor<BaseController>>(cls: T, app
     const { prefix, routes, middlewares } = getControllerMetadata(cls);
     for (const { method, path, handlerName } of routes) {
         const handler = (instance[handlerName as keyof typeof instance] as Function) || undefined;
-        const routeMiddlewares: Function[] = middlewares.filter((x) => x.name == handlerName);
+        const routeMiddlewares: Middleware[] = middlewares[handlerName] || [];
 
         app.add(method, prefix + path, async (ctx) => {
             const exec = async () => {
