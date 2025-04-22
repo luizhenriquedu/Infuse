@@ -2,8 +2,9 @@ import { createServer, IncomingMessage, OutgoingMessage, Server, ServerResponse 
 import { HttpContext } from "../interfaces/HttpContext";
 import { Method } from "../types/Route";
 import { Router } from "./Router";
-import { bodyParser } from "./parser/bodyParser";
 import { Middleware } from "../types/Middleware";
+import { loadStack } from "./middlewares/loadStack";
+import { parseJsonMiddleware } from "./middlewares/parseJsonMiddleware";
 
 export class App {
     declare server: Server<typeof IncomingMessage, typeof ServerResponse>;
@@ -23,32 +24,27 @@ export class App {
         this.server.listen(port, callback);
     }
 
+    parseJson() {
+        this.use(parseJsonMiddleware);
+    }
+
     private async handler(req: IncomingMessage, res: ServerResponse) {
         const method = req.method as Method;
         const url = req.url || "/";
         const result = this.router.find(method, url);
 
-        if (!result?.handler) {
-            res.statusCode = 404;
-            res.end(`Not found ${url}`);
-            return;
-        }
-
         const ctx: HttpContext = {
             Request: req,
             Response: res,
-            params: result.params || {},
+            params: result?.params || {},
         };
 
-        if (["POST", "PUT", "PATCH"].includes(method)) {
-            try {
-                ctx.body = await bodyParser(req);
-            } catch (e) {
-                console.error(e);
-                res.end("Invalid body");
-                return;
-            }
-        }
-        result.handler(ctx);
+        const handler = result?.handler
+            ? async () => result.handler(ctx)
+            : async () => {
+                  res.statusCode = 404;
+                  res.end("Not found");
+              };
+        await loadStack(ctx, this.middlewares, handler);
     }
 }
