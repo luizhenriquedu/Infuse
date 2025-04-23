@@ -5,7 +5,7 @@ import { Router } from "./Router";
 import { Middleware } from "../types/Middleware";
 import { loadStack } from "./middlewares/loadStack";
 import { parseJsonMiddleware } from "./middlewares/parseJsonMiddleware";
-import { getControllers } from "./di/controllerContainer";
+import { getControllers } from "./loader/controllerContainer";
 import { importControllers, useController } from "./loader/controllerLoader";
 import { ConfigLoader } from "./loader/ConfigLoader";
 import { parseUrlEncodedMiddleware } from "./middlewares/parseUrlEncodedMiddleware";
@@ -24,7 +24,7 @@ export class App {
             }
         });
     }
-
+    
     public addConfigLoader<T extends Object>(typeClass: new () => T) {
         return new ConfigLoader(typeClass);
     }

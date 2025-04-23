@@ -5,11 +5,13 @@ import { HttpContext } from "../interfaces/HttpContext";
 import { BaseController } from "../lib/classes/BaseController";
 import { FromBody } from "../lib/decorators/FromBodyDecorator";
 import { Use } from "../lib/decorators/useMiddlewareDecorator";
+import { Infuse } from "../lib/Fastify";
+import { IService } from "../interfaces/IService";
 
 class Config {
     declare port: number;
 }
-const app = new App();
+const app = new Infuse();
 app.parseJson();
 const config = app
     .addConfigLoader(Config)
@@ -33,7 +35,7 @@ class TestController extends BaseController {
     }
 }
 
-app.setDefaultErrorHandler(async (ctx, e) => {
+app.useErrorHandler(async (ctx, e) => {
     console.error(e);
     ctx.response.setHeader("Content-Type", "application/json");
     ctx.response.end(
@@ -44,9 +46,19 @@ app.setDefaultErrorHandler(async (ctx, e) => {
         })
     );
 });
+class MyService implements IMyService{
+    public teste = "teste"
+    constructor(){}
+    log(){
+        console.log("teste")
+    }
+}
+interface IMyService extends IService{
 
+}
 app.loadControllers();
-
+app.services.addSingleton<MyService>(MyService)
+app.services.getService<MyService>(MyService)
 app.listen(config.port, (err) => {
     console.log(`Online on: ${config.port}`);
 });
