@@ -3,14 +3,14 @@ import { Method } from "../../types/Route";
 import { parseJsonBody } from "../parser/parseJsonBody";
 
 export async function parseJsonMiddleware(ctx: HttpContext, next: () => Promise<void>) {
-    if (["POST", "PUT", "PATCH"].includes(ctx.Request.method as Method)) {
+    if (["POST", "PUT", "PATCH"].includes(ctx.request.method as Method)) {
         try {
-            ctx.body = await parseJsonBody(ctx.Request);
+            ctx.body = await parseJsonBody(ctx.request);
         } catch (e) {
             console.error(e);
-            ctx.Response.end("Invalid body");
+            ctx.response.end("Invalid body");
             return;
         }
     }
-    await next();
+    return await next();
 }

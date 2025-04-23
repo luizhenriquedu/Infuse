@@ -21,8 +21,8 @@ export async function loadStack(
         await next();
     } catch (e) {
         if (errHandler) return await errHandler(ctx, e as Error);
-        ctx.Response.statusCode = 500;
-        ctx.Response.end("Internal server error");
+        ctx.response.statusCode = 500;
+        ctx.response.end("Internal server error");
         console.error(e);
     }
 }

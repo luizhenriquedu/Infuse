@@ -29,7 +29,7 @@ export class App {
         return new ConfigLoader(typeClass);
     }
 
-    add(method: Method, path: string, handler: (ctx: HttpContext) => void) {
+    add(method: Method, path: string, handler: (ctx: HttpContext) => Promise<void>) {
         this.router.add(method, path, handler);
     }
 
@@ -60,8 +60,8 @@ export class App {
         const result = this.router.find(method, url);
 
         const ctx: HttpContext = {
-            Request: req,
-            Response: res,
+            request: req,
+            response: res,
             params: result?.params || {},
         };
 
@@ -71,6 +71,7 @@ export class App {
                   res.statusCode = 404;
                   res.end("Not found");
               };
+        console.log(handler);
         await loadStack(ctx, this.middlewares, handler, this.defaultErrorMiddleware);
     }
 }

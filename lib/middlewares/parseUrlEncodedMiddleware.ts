@@ -4,14 +4,14 @@ import { Method } from "../../types/Route";
 import { parseUrlEncoded } from "../parser/parseUrlEncoded";
 
 export async function parseUrlEncodedMiddleware(ctx: HttpContext, next: () => Promise<void>) {
-    if (["POST", "PUT", "PATCH"].includes(ctx.Request.method as Method)) {
+    if (["POST", "PUT", "PATCH"].includes(ctx.request.method as Method)) {
         try {
-            ctx.body = await parseUrlEncoded(ctx.Request);
+            ctx.body = await parseUrlEncoded(ctx.request);
         } catch (e) {
             console.error(e);
-            ctx.Response.end("Invalid body");
+            ctx.response.end("Invalid body");
             return;
         }
     }
-    await next();
+    return await next();
 }

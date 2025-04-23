@@ -1,8 +1,10 @@
 import { App } from "../lib/App";
 import { Controller } from "../lib/decorators/controllerDecorator";
-import { HttpGet, HttpPost } from "../lib/decorators/createMethodDecorator";
+import { HttpPost } from "../lib/decorators/createMethodDecorator";
 import { HttpContext } from "../interfaces/HttpContext";
 import { BaseController } from "../lib/classes/BaseController";
+import { FromBody } from "../lib/decorators/FromBodyDecorator";
+import { Use } from "../lib/decorators/useMiddlewareDecorator";
 
 class Config {
     declare port: number;
@@ -14,20 +16,27 @@ const config = app
     .AddJsonConfig(__dirname + "/config.json")
     .Build();
 
+class User {
+    public email: string | undefined = "";
+    public password: string | undefined = "";
+}
+
 @Controller("get/")
 class TestController extends BaseController {
+    @Use(async (ctx, next) => {
+        if (ctx.body.email) return next();
+        throw new Error("No email provided");
+    })
     @HttpPost("t")
-    getLog(ctx: HttpContext) {
-        const { email } = ctx.body;
-        if (!email) throw new Error("error");
-        ctx.Response.end("oi");
+    getLog(ctx: HttpContext, @FromBody() user: User) {
+        ctx.response.end(`${user.email} --- ${JSON.stringify(user)}`);
     }
 }
 
 app.setDefaultErrorHandler(async (ctx, e) => {
-    console.log(e);
-    ctx.Response.setHeader("Content-Type", "application/json");
-    ctx.Response.end(
+    console.error(e);
+    ctx.response.setHeader("Content-Type", "application/json");
+    ctx.response.end(
         JSON.stringify({
             name: e.name,
             message: e.message,

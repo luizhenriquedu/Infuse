@@ -5,6 +5,7 @@
     "license": "MIT",
     "devDependencies": {
         "@types/node": "^22.14.1",
+        "barrelsby": "^2.8.1",
         "ts-node-dev": "^2.0.0",
         "typescript": "^5.8.3"
     },
@@ -15,7 +16,8 @@
         "reflect-metadata": "^0.2.2"
     },
     "scripts": {
-        "dev": "tsnd --respawn --transpile-only infuse.ts",
-        "dev:integration": "tsnd --respawn --transpile-only ./integration/server.ts"
+        "dev:integration": "tsnd --respawn --transpile-only ./integration/server.ts",
+        "test": "tsx --test tests/*.test.ts",
+        "barrels": "npx barrelsby --directory ./ --delete --barrelName index.ts --structure flat"
     }
 }

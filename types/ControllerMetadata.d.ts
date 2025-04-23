@@ -1,6 +1,6 @@
 import { Middleware } from "./Middleware";
 
-export type controllerMetadata = {
+export type ControllerMetadata = {
     prefix: string;
     routes: {
         method: Method;

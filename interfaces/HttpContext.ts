@@ -1,8 +1,8 @@
 import { IncomingMessage, ServerResponse } from "http";
 
-export interface HttpContext {
-    Request: IncomingMessage;
-    Response: ServerResponse;
-    params: Record<string, string>;
+export abstract class HttpContext {
+    abstract request: IncomingMessage;
+    abstract response: ServerResponse;
+    abstract params: Record<string, string>;
     body?: any;
 }
