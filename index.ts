@@ -10,7 +10,7 @@ export * from "./lib/classes/BaseController";
 export * from "./lib/decorators/controllerDecorator";
 export * from "./lib/decorators/createMethodDecorator";
 export * from "./lib/decorators/useMiddlewareDecorator";
-export * from "./lib/di/controllerContainer";
+export * from "./lib/loader/controllerContainer";
 export * from "./lib/loader/ConfigLoader";
 export * from "./lib/loader/controllerLoader";
 export * from "./lib/middlewares/loadStack";

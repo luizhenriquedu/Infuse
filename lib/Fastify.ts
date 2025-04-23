@@ -1,13 +1,18 @@
 import { HttpContext } from "../interfaces/HttpContext";
+import { Constructor } from "../types/Constructor";
 import { Middleware } from "../types/Middleware";
 import { App } from "./App";
+import { Services } from "./Services";
 
 export class Infuse {
     private _app: App = new App();
-
+    public services: Services = new Services()
     public use(middleware: Middleware) {
         this._app.use(middleware);
     }
+    public addConfigLoader<T extends Object>(typeClass: new () => T) {
+            return this._app.addConfigLoader(typeClass)
+        }
     public parseUrlEnconded() {
         this._app.parseUrlEncoded();
     }

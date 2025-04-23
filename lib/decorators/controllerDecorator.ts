@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { Constructor } from "../../types/Constructor";
-import { addController } from "../di/controllerContainer";
+import { addController } from "../loader/controllerContainer";
 import { BaseController } from "../classes/BaseController";
 import { ControllerMetadata } from "../../types/ControllerMetadata";
 
