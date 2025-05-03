@@ -1,4 +1,4 @@
-import { HttpContext } from "../../interfaces/HttpContext";
+import { HttpContext } from "../classes/HttpContext";
 import { Method } from "../../types/Route";
 
 import { parseUrlEncoded } from "../parser/parseUrlEncoded";

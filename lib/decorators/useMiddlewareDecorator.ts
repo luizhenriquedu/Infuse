@@ -1,4 +1,4 @@
-import { HttpContext } from "../../interfaces/HttpContext";
+import { HttpContext } from "../classes/HttpContext";
 import { MIDDLEWARES_KEY } from "./controllerDecorator";
 
 export function Use(middleware: (ctx: HttpContext, exec: () => Promise<void>) => Promise<void>): MethodDecorator {

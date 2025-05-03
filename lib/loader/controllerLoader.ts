@@ -4,9 +4,9 @@ import { App } from "../App";
 import { Constructor } from "../../types/Constructor";
 import { getControllerMetadata } from "../decorators/controllerDecorator";
 import { Middleware } from "../../types/Middleware";
-import { getControllerBodyMetadata } from "../decorators/FromBodyDecorator";
+import { getControllerBodyMetadata } from "../decorators/fromBodyDecorator";
 import { parseJsonToInstance } from "../parser/parseJsonToInstance";
-import { HttpContext } from "../../interfaces/HttpContext";
+import { HttpContext } from "../classes/HttpContext";
 export async function importControllers() {
     const files = (await glob(`${process.cwd()}/src/controllers/**/*`, { absolute: true })) || [];
     for (const file of files) {

@@ -1,4 +1,4 @@
-import { HttpContext } from "../../interfaces/HttpContext";
+import { HttpContext } from "../classes/HttpContext";
 import { Middleware } from "../../types/Middleware";
 
 export async function loadStack(

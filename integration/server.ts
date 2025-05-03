@@ -1,12 +1,10 @@
-import { App } from "../lib/App";
 import { Controller } from "../lib/decorators/controllerDecorator";
 import { HttpPost } from "../lib/decorators/createMethodDecorator";
-import { HttpContext } from "../interfaces/HttpContext";
+import { HttpContext } from "../lib/classes/HttpContext";
 import { BaseController } from "../lib/classes/BaseController";
-import { FromBody } from "../lib/decorators/FromBodyDecorator";
+import { FromBody } from "../lib/decorators/fromBodyDecorator";
 import { Use } from "../lib/decorators/useMiddlewareDecorator";
 import { Infusy } from "../lib/Infusy";
-import { IService } from "../interfaces/IService";
 
 class Config {
     declare port: number;
@@ -46,14 +44,13 @@ app.useErrorHandler(async (ctx, e) => {
         })
     );
 });
-class MyService implements IMyService {
+class MyService {
     public teste = "teste";
     constructor() {}
     log() {
         console.log("teste");
     }
 }
-interface IMyService extends IService {}
 app.loadControllers();
 app.services.addSingleton<MyService>(MyService);
 app.services.getService<MyService>(MyService);

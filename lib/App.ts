@@ -1,5 +1,5 @@
 import { createServer, IncomingMessage, Server, ServerResponse } from "http";
-import { HttpContext } from "../interfaces/HttpContext";
+import { HttpContext } from "./classes/HttpContext";
 import { Method } from "../types/Route";
 import { Router } from "./Router";
 import { Middleware } from "../types/Middleware";
@@ -24,7 +24,7 @@ export class App {
             }
         });
     }
-    
+
     public addConfigLoader<T extends Object>(typeClass: new () => T) {
         return new ConfigLoader(typeClass);
     }

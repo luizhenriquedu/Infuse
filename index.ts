@@ -3,7 +3,7 @@
  */
 
 export * from "./integration/server";
-export * from "./interfaces/HttpContext";
+export * from "./lib/classes/HttpContext";
 export * from "./lib/App";
 export * from "./lib/Router";
 export * from "./lib/classes/BaseController";
